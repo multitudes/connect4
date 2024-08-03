@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 16:28:16 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 17:25:49 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,6 @@
 #include <stdbool.h>
 #include "connect.h"
 #include "checks.h"
-
-/**
- * @brief a player has 40 sec for move and ttl 4 min
- * 
- * 
-*/
-typedef struct 	s_player
-{
-	char 	*name;
-	char 	*piece;
-	time_t 	start_time;
-	time_t 	start_move_time;
-	int 	allowed_move_time;
-	int 	number_of_moves;
-}				t_player;
-
 
 /**
  * @brief the board is an array of stacks
@@ -115,6 +99,14 @@ bool init_board(t_board *board, int argc, char **argv)
 	return (true);
 }
 
+void make_move(t_stack *stack, char piece)
+{
+
+	stack->top++;
+	stack->data[stack->top] = piece;
+}
+
+
 int main(int argc, char **argv)
 {
 	//The grid size must be taken as parameters to the program.
@@ -128,85 +120,111 @@ int main(int argc, char **argv)
 	init_stacks(stacks, board.cols);
 	board.stacks = stacks;
 
-	// initialize players
-	t_player ai = {"AI", "X", time(NULL), time(NULL), 4, 0};
-	t_player player = {"Mario", "O", time(NULL), time(NULL), 4, 0};
+	// initialize players - name , piece, start_time, start_move_time, allowed_time, allowed_move_time, curr number_of_moves
+	t_player ai = {"AI", "X", time(NULL), time(NULL), MAX_TIME, 4, 0};
+	t_player player = {"Mario", "O", time(NULL), time(NULL), MAX_TIME, 4, 0};
 	board.players[0] = player;
 	board.players[1] = ai;
 
 	printf("Hello World!\n");
 	printplayers(ai, player);
-	printstacks(board.stacks, board.rows ,board.cols);
+
 
 	// seed random number generator
 	srand(time(NULL));
 
 	// chose the first player
-	if (rand() % 2 == 0)
+	if (rand() % 2 == 0) {
 		board.current_player = 0;
-    else	
+	}
+    else 	
 		board.current_player = 1;
 	
+
+	printf("Player %s starts\n", board.players[board.current_player].name);
 	
-	if (board.current_player == 0)
-	{
-		time_t currentTime = time(NULL);
-		board.players[board.current_player].start_move_time = currentTime;
-		long moveelapsedSeconds = 0;
-		ft_printf("Your move? (colomn) \n");
-		char *move;
-		while ((move = get_next_line(0)) != NULL)
+	while (1) {	
+		if (board.current_player == 0)
 		{
-			if (move)
+			time_t currentTime = time(NULL);
+
+			board.players[board.current_player].start_move_time = currentTime;
+			
+			printstacks(board.stacks, board.rows ,board.cols);
+
+			ft_printf("Your move?\n");
+			char *move;
+			while ((move = get_next_line(0)) != NULL)
 			{
-				printf("You entered: %s\n", move);
-				currentTime = time(NULL);
-				if (currentTime - board.players[board.current_player].start_move_time > board.players[board.current_player].allowed_move_time)
+				if (move)
 				{
-					ft_printf("But your time is up...\n");
-					ft_printf("You lose!\n");
-					return (1);
+					printf("You entered: %s\n", move);
+					if (ft_strcmp(move, "q\n") == 0)
+					{
+						printf("quitting\n");
+						return (1);
+					}
+					currentTime = time(NULL);
+					if ((currentTime - board.players[board.current_player].start_move_time > board.players[board.current_player].allowed_move_time) || \
+						(currentTime - board.players[board.current_player].start_time > board.players[board.current_player].allowed_time))
+					{
+						ft_printf("But your time is up...\n");
+						ft_printf("You lose!\n");
+						return (1);
+					}
+					// check move is a number and between 1 and board.cols
+					int pos = ft_atoi(move);
+					if (pos < 1 || pos > board.cols)
+					{
+						ft_printf("Invalid move. Please enter a number between 1 and %d\n", board.cols);
+						continue;
+					}
+					// check if the stack is full
+					if (board.stacks[pos - 1].top == board.rows - 1)
+					{
+						ft_printf("The stack is full. Please enter another move\n");
+						continue;
+					}
+					make_move(&board.stacks[pos - 1], board.players[board.current_player].piece[0]);
+					board.players[board.current_player].number_of_moves++;
+					// printf("data in stack %s\n", board.stacks[pos - 1].data);
+					if (board.players[board.current_player].number_of_moves++ > 3)
+					{
+						// check for winner
+						if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
+						{
+							ft_printf("Player %s wins!\n", board.players[board.current_player].name);
+							printstacks(board.stacks, board.rows ,board.cols);
+							ft_printf("\nGame over\n");
+							return (0);
+						}
+					}
+					break;
 				}
-				// check move is a number and between 1 and board.cols
-				int pos = ft_atoi(move);
-				if (pos < 1 || pos > board.cols)
-				{
-					ft_printf("Invalid move. Please enter a number between 1 and %d\n", board.cols);
-					continue;
-				}
-				// check if the stack is full
-				if (board.stacks[pos - 1].top == board.rows - 1)
-				{
-					ft_printf("The stack is full. Please enter another move\n");
-					continue;
-				}
-				// put the piece in the stack
-				board.players[board.current_player].number_of_moves++;
-				board.stacks[pos - 1].top++;
-				board.stacks[pos - 1].data[board.stacks[pos - 1].top] = board.players[board.current_player].piece[0];
-				printf("Player %d played in column %d\n", board.current_player + 1, pos);
-				printf("data in stack %s\n", board.stacks[pos - 1].data);
-				if (board.players[board.current_player].number_of_moves++ > 3)
-				{
-					// check for winner
-					
-				}
-				break;
 			}
+			printstacks(board.stacks, board.rows ,board.cols);
+			board.current_player = board.current_player == 0 ? 1 : 0;
 		}
-		printstacks(board.stacks, board.rows ,board.cols);
-		if (board.players[board.current_player].number_of_moves > 3)
+		else
 		{
-			if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
+			time_t currentTime = time(NULL);
+			board.players[board.current_player].start_move_time = currentTime;
+			long moveelapsedSeconds = 0;
+			int pos = rand() % board.cols + 1;
+			make_move(&board.stacks[pos - 1], board.players[board.current_player].piece[0]);
+			board.players[board.current_player].number_of_moves++;
+			if (board.players[board.current_player].number_of_moves++ > 3)
 			{
-				ft_printf("Player %d wins!\n", board.players[board.current_player].name);
-				return (0);
+				if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
+				{
+					ft_printf("Player %d wins!\n", board.players[board.current_player].name);
+					return (0);
+				}
 			}
+			ft_printf("\nAI move\n");
+			board.current_player = board.current_player == 0 ? 1 : 0;
+		
 		}
-	}
-	else
-	{
-		printf("AI 2 starts\n");
 	}
     // int elapsedMinutes = moveelapsedSeconds / 60;
 
