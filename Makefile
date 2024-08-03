@@ -16,9 +16,9 @@ LIBS 			+= 	$(LIBFTDIR)/libft.a
 
 INCLUDES		=  	-I./include -I$(LIBMLX)/include -I$(LIBFTDIR)
 
-SRCS 			= $(addprefix $(SRC_DIR), main.c checks.c utils.c)
+SRCS 			= $(addprefix $(SRC_DIR), main.c checks.c utils.c players.c)
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
-HDRS 			= $(addprefix include/, connect.h checks.h utils.h)
+HDRS 			= $(addprefix include/, connect.h checks.h utils.h players.h)
 
 LIBFT 			= $(LIBFTDIR)/libft.a
 LIBFT_LIB 		= -Llibft -lft

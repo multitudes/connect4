@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:23:55 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 18:01:40 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 18:45:16 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,5 @@ typedef struct	s_board
 	int			current_player;	
 	bool		has_GUI;
 } 				t_board;
-
-
-
 
 #endif

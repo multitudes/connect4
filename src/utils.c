@@ -6,12 +6,13 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:00:26 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 18:17:12 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 18:48:58 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "connect.h"
+#include "checks.h"
 
 void init_stacks(t_stack *stacks, int cols)
 {
@@ -133,7 +134,8 @@ bool player_wins(t_board board, char *move)
 		{
 			ft_printf("Player %s wins!\n", board.players[board.current_player].name);
 			printstacks(board.stacks, board.rows ,board.cols);
-			ft_printf("\nGame over\n");
+			time_t currentTime = time(NULL);
+			ft_printf("\nGame over in %d min and %d sec\n\n",  (MAX_TIME - (currentTime - board.players[board.current_player].start_time)) / 60, (MAX_TIME - (currentTime - board.players[board.current_player].start_time)) % 60);
 			free(move);
 			return (true);
 		}
