@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 13:46:52 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 13:49:49 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,11 @@ int main(int argc, char **argv)
 {
 	//The grid size must be taken as parameters to the program.
 	// Ex: ./connect4 8 10
-
-	
 	t_board board;
 	if (!init_board(&board, argc, argv))
 		return (1);
 	
+	// init stacks
 	t_stack stacks[board.cols];
 	init_stacks(stacks, board.cols);
 	board.stacks = stacks;
@@ -140,9 +139,18 @@ int main(int argc, char **argv)
 	t_player player = {"Mario", "O", time(NULL), time(NULL)};
 	board.players[0] = ai;
 	board.players[1] = player;
+
 	printf("Hello World!\n");
 	printplayers(ai, player);
 	printstacks(board.stacks, board.rows ,board.cols);
 
+	// chose the first player
+
+
+	// ask for player move an check time
+
+	// check for winner
+
+	// switch player
 	
 }
