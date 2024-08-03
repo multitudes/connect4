@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 17:49:50 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 17:59:37 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,7 @@ int main(int argc, char **argv)
 				{
 					ft_printf("\nPlayer %s wins!\n\n", board.players[board.current_player].name);
 					printstacks(board.stacks, board.rows ,board.cols);
+					ft_printf("\nGame over\n\n");
 					return (0);
 				}
 			}
