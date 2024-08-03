@@ -6,13 +6,14 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 13:33:06 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 13:46:52 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "libft.h"
 #include <time.h>
+#include <stdbool.h>
 
 /**
  * @brief a player has 40 sec for move and ttl 4 min
@@ -47,6 +48,7 @@ typedef struct	s_stack
  * @param cols the number of columns in the board
  * @param players the players in the game
  * @param current_player the player that is playing
+ * @param has_GUI if the game has a GUI
  * 
 */
 typedef struct	s_board
@@ -56,6 +58,7 @@ typedef struct	s_board
 	int			cols;
 	t_player	players[2];
 	int			current_player;	
+	bool		has_GUI;
 } 				t_board;
 
 void init_stacks(t_stack *stacks, int cols)
@@ -87,28 +90,47 @@ void printplayers(t_player ai, t_player player)
 	printf("Player 2: %s\n", ai.name);
 }
 
+bool init_board(t_board *board, int argc, char **argv)
+{
+	board->rows = 0;
+	board->cols = 0;
+	board->current_player = 0;
+
+	board->has_GUI = false;
+	if (argc == 4 && (ft_strcmp(argv[3], "--gui") == 0 || ft_strcmp(argv[3], "-g") == 0))
+		board->has_GUI = true;
+	else
+	if (argc != 3 )
+	{
+		printf("Usage: ./connect4 <rows> <cols> (<--gui | -g>)\n");
+		return (false);
+	}
+
+	board->rows = ft_atoi(argv[1]);
+	if (board->rows < 6 || board->rows > 9)
+	{
+		printf("The number of rows must be between 6 and 9\n");
+		return (false);
+	}
+	board->cols = ft_atoi(argv[2]);
+	if (board->cols < 7 || board->cols > 9)
+	{
+		printf("The number of columns must be between 7 and 9\n");
+		return (false);
+	}
+	return (true);
+}
+
 int main(int argc, char **argv)
 {
 	//The grid size must be taken as parameters to the program.
 	// Ex: ./connect4 8 10
-	if (argc != 3)
-	{
-		printf("Usage: ./connect4 <rows> <cols>\n");
-		return (1);
-	}
+
+	
 	t_board board;
-	board.rows = ft_atoi(argv[1]);
-	if (board.rows < 6 || board.rows > 9)
-	{
-		printf("The number of rows must be between 6 and 9\n");
+	if (!init_board(&board, argc, argv))
 		return (1);
-	}
-	board.cols = ft_atoi(argv[2]);
-	if (board.cols < 7 || board.cols > 9)
-	{
-		printf("The number of columns must be between 7 and 9\n");
-		return (1);
-	}
+	
 	t_stack stacks[board.cols];
 	init_stacks(stacks, board.cols);
 	board.stacks = stacks;
@@ -121,4 +143,6 @@ int main(int argc, char **argv)
 	printf("Hello World!\n");
 	printplayers(ai, player);
 	printstacks(board.stacks, board.rows ,board.cols);
+
+	
 }
