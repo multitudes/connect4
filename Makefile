@@ -52,11 +52,11 @@ $(NAME): $(OBJS) $(HDRS)
 clean:
 	rm -f $(OBJS)
 	rm -rf $(OBJ_DIR)
-	$(MAKE) -C $(LIBFTDIR) clean
+	# $(MAKE) -C $(LIBFTDIR) clean
 
 fclean: clean
 	@rm -rf $(NAME)
-	$(MAKE) -C $(LIBFTDIR) fclean
+	# $(MAKE) -C $(LIBFTDIR) fclean
 
 
 re: fclean all
