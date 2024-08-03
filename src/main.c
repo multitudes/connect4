@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 18:13:04 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 18:16:12 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,23 @@ bool not_a_valid_input(t_board board, char *move)
 	return (false);
 }
 
+bool player_wins(t_board board, char *move)
+{
+	if (board.players[board.current_player].number_of_moves++ > 3)
+	{
+		if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
+		{
+			ft_printf("Player %s wins!\n", board.players[board.current_player].name);
+			printstacks(board.stacks, board.rows ,board.cols);
+			ft_printf("\nGame over\n");
+			free(move);
+			return (true);
+		}
+	}
+	return (false);
+}
+
+
 int main(int argc, char **argv)
 {
 	//The grid size must be taken as parameters to the program.
@@ -187,19 +204,8 @@ int main(int argc, char **argv)
 					int pos = ft_atoi(move);
 					make_move(&board.stacks[pos - 1], board.players[board.current_player].piece[0]);
 					board.players[board.current_player].number_of_moves++;
-					// printf("data in stack %s\n", board.stacks[pos - 1].data);
-					if (board.players[board.current_player].number_of_moves++ > 3)
-					{
-						// check for winner
-						if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
-						{
-							ft_printf("Player %s wins!\n", board.players[board.current_player].name);
-							printstacks(board.stacks, board.rows ,board.cols);
-							ft_printf("\nGame over\n");
-							free(move);
-							return (0);
-						}
-					}
+					if (player_wins(board, move))
+						return (0);
 					free(move);
 					break;
 				}
