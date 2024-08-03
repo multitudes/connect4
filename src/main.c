@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 17:59:37 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 18:13:04 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,6 @@
 #include <stdbool.h>
 #include "connect.h"
 #include "checks.h"
-
-/**
- * @brief the board is an array of stacks
- * 
- * @param stacks the columns of the board
- * @param rows the number of rows in the board
- * @param cols the number of columns in the board
- * @param players the players in the game
- * @param current_player the player that is playing
- * @param has_GUI if the game has a GUI
- * 
-*/
-typedef struct	s_board
-{
-	t_stack		*stacks;
-	int			rows;
-	int			cols;
-	t_player	players[2];
-	int			current_player;	
-	bool		has_GUI;
-} 				t_board;
 
 
 void init_stacks(t_stack *stacks, int cols)
@@ -106,6 +85,50 @@ void make_move(t_stack *stack, char piece)
 	stack->data[stack->top] = piece;
 }
 
+bool asked_to_quit(char *move)
+{
+	if (ft_strcmp(move, "q\n") == 0)
+	{
+		printf("quitting\n\n");
+		free(move);
+		return (true);
+	}
+	return (false);
+}
+
+bool time_is_up(t_board board, char *move)
+{
+	time_t currentTime = time(NULL);
+	if ((currentTime - board.players[board.current_player].start_move_time > board.players[board.current_player].allowed_move_time) || \
+		(currentTime - board.players[board.current_player].start_time > board.players[board.current_player].allowed_time))
+	{
+		ft_printf("But your time is up...\n");
+		ft_printf("You lose!\n");
+		free(move);
+		return (true);
+	}
+	return (false);
+}
+
+bool not_a_valid_input(t_board board, char *move)
+{
+// check move is a number and between 1 and board.cols
+	int pos = ft_atoi(move);
+	if (pos < 1 || pos > board.cols)
+	{
+		ft_printf("Invalid move. Please enter a number between 1 and %d\n", board.cols);
+		free(move);
+		return (true);
+	}
+	// check if the stack is full
+	if (board.stacks[pos - 1].top == board.rows - 1)
+	{
+		ft_printf("The stack is full. Please enter another move\n");
+		free(move);
+		return (true);
+	}
+	return (false);
+}
 
 int main(int argc, char **argv)
 {
@@ -126,9 +149,7 @@ int main(int argc, char **argv)
 	board.players[0] = player;
 	board.players[1] = ai;
 
-	printf("Hello World!\n");
 	printplayers(ai, player);
-
 
 	// seed random number generator
 	srand(time(NULL));
@@ -159,36 +180,11 @@ int main(int argc, char **argv)
 				if (move)
 				{
 					printf("You entered: %s\n", move);
-					if (ft_strcmp(move, "q\n") == 0)
-					{
-						printf("quitting\n");
-						free(move);
+					if (asked_to_quit(move) || time_is_up(board, move))
 						return (1);
-					}
-					currentTime = time(NULL);
-					if ((currentTime - board.players[board.current_player].start_move_time > board.players[board.current_player].allowed_move_time) || \
-						(currentTime - board.players[board.current_player].start_time > board.players[board.current_player].allowed_time))
-					{
-						ft_printf("But your time is up...\n");
-						ft_printf("You lose!\n");
-						free(move);
-						return (1);
-					}
-					// check move is a number and between 1 and board.cols
+					if (not_a_valid_input(board, move))
+						continue;
 					int pos = ft_atoi(move);
-					if (pos < 1 || pos > board.cols)
-					{
-						ft_printf("Invalid move. Please enter a number between 1 and %d\n", board.cols);
-						free(move);
-						continue;
-					}
-					// check if the stack is full
-					if (board.stacks[pos - 1].top == board.rows - 1)
-					{
-						ft_printf("The stack is full. Please enter another move\n");
-						free(move);
-						continue;
-					}
 					make_move(&board.stacks[pos - 1], board.players[board.current_player].piece[0]);
 					board.players[board.current_player].number_of_moves++;
 					// printf("data in stack %s\n", board.stacks[pos - 1].data);

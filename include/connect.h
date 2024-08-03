@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:23:55 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 17:24:46 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 18:01:40 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #define MAX_COLS 9
 
 #include <time.h>
+#include <stdbool.h>
 
 /**
  * @brief a stack is a column in the board
@@ -47,5 +48,29 @@ typedef struct 	s_player
 	int 	allowed_move_time;
 	int 	number_of_moves;
 }				t_player;
+
+/**
+ * @brief the board is an array of stacks
+ * 
+ * @param stacks the columns of the board
+ * @param rows the number of rows in the board
+ * @param cols the number of columns in the board
+ * @param players the players in the game
+ * @param current_player the player that is playing
+ * @param has_GUI if the game has a GUI
+ * 
+*/
+typedef struct	s_board
+{
+	t_stack		*stacks;
+	int			rows;
+	int			cols;
+	t_player	players[2];
+	int			current_player;	
+	bool		has_GUI;
+} 				t_board;
+
+
+
 
 #endif
