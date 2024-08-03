@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 15:10:12 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 15:27:21 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@
 */
 typedef struct 	s_player
 {
-	char *name;
-	char *piece;
-	time_t start_time;
-	time_t start_move_time;
-	int allowed_move_time;
+	char 	*name;
+	char 	*piece;
+	time_t 	start_time;
+	time_t 	start_move_time;
+	int 	allowed_move_time;
+	int 	number_of_moves;
 }				t_player;
 
 /**
@@ -40,7 +41,7 @@ typedef struct 	s_player
 */
 typedef struct	s_stack
 {
-	char data[MAX_ROWS];
+	char data[MAX_ROWS + 1];
 	int top;
 } 				t_stack;
 
@@ -65,13 +66,13 @@ typedef struct	s_board
 	bool		has_GUI;
 } 				t_board;
 
-#include <string.h>
 
 void init_stacks(t_stack *stacks, int cols)
 {
 	for (int i = 0; i < cols; i++)
 	{
 		ft_memset(stacks[i].data, '-', MAX_ROWS);
+		stacks[i].data[MAX_ROWS] = '\0';
 		stacks[i].top = -1;
 	}
 }
@@ -140,8 +141,8 @@ int main(int argc, char **argv)
 	board.stacks = stacks;
 
 	// initialize players
-	t_player ai = {"AI", "X", time(NULL), time(NULL), 4};
-	t_player player = {"Mario", "O", time(NULL), time(NULL), 4};
+	t_player ai = {"AI", "X", time(NULL), time(NULL), 4, 0};
+	t_player player = {"Mario", "O", time(NULL), time(NULL), 4, 0};
 	board.players[0] = player;
 	board.players[1] = ai;
 
@@ -192,10 +193,16 @@ int main(int argc, char **argv)
 					continue;
 				}
 				// put the piece in the stack
+				board.players[board.current_player].number_of_moves++;
 				board.stacks[pos - 1].top++;
 				board.stacks[pos - 1].data[board.stacks[pos - 1].top] = board.players[board.current_player].piece[0];
 				printf("Player %d played in column %d\n", board.current_player + 1, pos);
 				printf("data in stack %s\n", board.stacks[pos - 1].data);
+				if (board.players[board.current_player].number_of_moves++ > 3)
+				{
+					// check for winner
+					
+				}
 				break;
 			}
 		}
