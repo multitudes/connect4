@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 17:25:49 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 17:30:02 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,8 @@ int main(int argc, char **argv)
 			board.players[board.current_player].start_move_time = currentTime;
 			
 			printstacks(board.stacks, board.rows ,board.cols);
-
-			ft_printf("Your move?\n");
+			ft_printf("Remaining time %d min and %d sec\n", (MAX_TIME - (currentTime - board.players[board.current_player].start_time)) / 60, (MAX_TIME - (currentTime - board.players[board.current_player].start_time)) % 60);	
+			ft_printf("\nYour move?\n");
 			char *move;
 			while ((move = get_next_line(0)) != NULL)
 			{
@@ -217,7 +217,8 @@ int main(int argc, char **argv)
 			{
 				if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
 				{
-					ft_printf("Player %d wins!\n", board.players[board.current_player].name);
+					ft_printf("\nPlayer %s wins!\n", board.players[board.current_player].name);
+					printstacks(board.stacks, board.rows ,board.cols);
 					return (0);
 				}
 			}
