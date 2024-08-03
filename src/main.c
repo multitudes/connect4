@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 17:30:02 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 17:49:50 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ int main(int argc, char **argv)
 					if (ft_strcmp(move, "q\n") == 0)
 					{
 						printf("quitting\n");
+						free(move);
 						return (1);
 					}
 					currentTime = time(NULL);
@@ -170,6 +171,7 @@ int main(int argc, char **argv)
 					{
 						ft_printf("But your time is up...\n");
 						ft_printf("You lose!\n");
+						free(move);
 						return (1);
 					}
 					// check move is a number and between 1 and board.cols
@@ -177,12 +179,14 @@ int main(int argc, char **argv)
 					if (pos < 1 || pos > board.cols)
 					{
 						ft_printf("Invalid move. Please enter a number between 1 and %d\n", board.cols);
+						free(move);
 						continue;
 					}
 					// check if the stack is full
 					if (board.stacks[pos - 1].top == board.rows - 1)
 					{
 						ft_printf("The stack is full. Please enter another move\n");
+						free(move);
 						continue;
 					}
 					make_move(&board.stacks[pos - 1], board.players[board.current_player].piece[0]);
@@ -196,11 +200,14 @@ int main(int argc, char **argv)
 							ft_printf("Player %s wins!\n", board.players[board.current_player].name);
 							printstacks(board.stacks, board.rows ,board.cols);
 							ft_printf("\nGame over\n");
+							free(move);
 							return (0);
 						}
 					}
+					free(move);
 					break;
 				}
+				free(move);
 			}
 			printstacks(board.stacks, board.rows ,board.cols);
 			board.current_player = board.current_player == 0 ? 1 : 0;
@@ -209,7 +216,6 @@ int main(int argc, char **argv)
 		{
 			time_t currentTime = time(NULL);
 			board.players[board.current_player].start_move_time = currentTime;
-			long moveelapsedSeconds = 0;
 			int pos = rand() % board.cols + 1;
 			make_move(&board.stacks[pos - 1], board.players[board.current_player].piece[0]);
 			board.players[board.current_player].number_of_moves++;
@@ -217,14 +223,13 @@ int main(int argc, char **argv)
 			{
 				if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
 				{
-					ft_printf("\nPlayer %s wins!\n", board.players[board.current_player].name);
+					ft_printf("\nPlayer %s wins!\n\n", board.players[board.current_player].name);
 					printstacks(board.stacks, board.rows ,board.cols);
 					return (0);
 				}
 			}
 			ft_printf("\nAI move\n");
 			board.current_player = board.current_player == 0 ? 1 : 0;
-		
 		}
 	}
     // int elapsedMinutes = moveelapsedSeconds / 60;
