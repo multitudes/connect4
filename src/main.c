@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 15:27:21 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 16:28:16 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 #include "libft.h"
 #include <time.h>
 #include <stdbool.h>
-
-#define MAX_ROWS 9
-#define MAX_COLS 9
+#include "connect.h"
+#include "checks.h"
 
 /**
  * @brief a player has 40 sec for move and ttl 4 min
@@ -33,17 +32,6 @@ typedef struct 	s_player
 	int 	number_of_moves;
 }				t_player;
 
-/**
- * @brief a stack is a column in the board
- * 
- * It is initialized at -1 and it increases as the player puts pieces in it
- * @param data the piece that is in the stack as a char X or O
-*/
-typedef struct	s_stack
-{
-	char data[MAX_ROWS + 1];
-	int top;
-} 				t_stack;
 
 /**
  * @brief the board is an array of stacks
@@ -108,20 +96,20 @@ bool init_board(t_board *board, int argc, char **argv)
 	else
 	if (argc != 3 )
 	{
-		printf("Usage: ./connect4 <rows> <cols> (<--gui | -g>)\n");
+		ft_printf("Usage: ./connect4 <rows> <cols> (<--gui | -g>)\n");
 		return (false);
 	}
 
 	board->rows = ft_atoi(argv[1]);
 	if (board->rows < 6 || board->rows > 9)
 	{
-		printf("The number of rows must be between 6 and 9\n");
+		ft_printf("The number of rows must be between 6 and 9\n");
 		return (false);
 	}
 	board->cols = ft_atoi(argv[2]);
 	if (board->cols < 7 || board->cols > 9)
 	{
-		printf("The number of columns must be between 7 and 9\n");
+		ft_printf("The number of columns must be between 7 and 9\n");
 		return (false);
 	}
 	return (true);
@@ -207,11 +195,19 @@ int main(int argc, char **argv)
 			}
 		}
 		printstacks(board.stacks, board.rows ,board.cols);
-
+		if (board.players[board.current_player].number_of_moves > 3)
+		{
+			if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
+			{
+				ft_printf("Player %d wins!\n", board.players[board.current_player].name);
+				return (0);
+			}
+		}
 	}
 	else
+	{
 		printf("AI 2 starts\n");
-	
+	}
     // int elapsedMinutes = moveelapsedSeconds / 60;
 
 	// ask for player move an check time
