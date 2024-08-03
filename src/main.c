@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 14:17:00 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 15:10:12 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "libft.h"
 #include <time.h>
 #include <stdbool.h>
+
+#define MAX_ROWS 9
+#define MAX_COLS 9
 
 /**
  * @brief a player has 40 sec for move and ttl 4 min
@@ -26,6 +29,7 @@ typedef struct 	s_player
 	char *piece;
 	time_t start_time;
 	time_t start_move_time;
+	int allowed_move_time;
 }				t_player;
 
 /**
@@ -36,7 +40,7 @@ typedef struct 	s_player
 */
 typedef struct	s_stack
 {
-	char data;
+	char data[MAX_ROWS];
 	int top;
 } 				t_stack;
 
@@ -61,11 +65,13 @@ typedef struct	s_board
 	bool		has_GUI;
 } 				t_board;
 
+#include <string.h>
+
 void init_stacks(t_stack *stacks, int cols)
 {
 	for (int i = 0; i < cols; i++)
 	{
-		stacks[i].data = '-';
+		ft_memset(stacks[i].data, '-', MAX_ROWS);
 		stacks[i].top = -1;
 	}
 }
@@ -73,15 +79,14 @@ void init_stacks(t_stack *stacks, int cols)
 
 void printstacks(t_stack *stacks, int rows, int cols)
 {	
-	for (int i = 0; i < rows; i++)
+	for (int i = rows - 1; i >= 0; i--)
 	{
 		for (int j = 0; j < cols; j++)
 		{
-			printf("%c", stacks[j].data);
+			printf("%c", stacks[j].data[i]);
 		}
 		printf("\n");
 	}
-	
 }
 
 void printplayers(t_player ai, t_player player)
@@ -135,8 +140,8 @@ int main(int argc, char **argv)
 	board.stacks = stacks;
 
 	// initialize players
-	t_player ai = {"AI", "X", time(NULL), time(NULL)};
-	t_player player = {"Mario", "O", time(NULL), time(NULL)};
+	t_player ai = {"AI", "X", time(NULL), time(NULL), 4};
+	t_player player = {"Mario", "O", time(NULL), time(NULL), 4};
 	board.players[0] = player;
 	board.players[1] = ai;
 
@@ -159,18 +164,42 @@ int main(int argc, char **argv)
 		time_t currentTime = time(NULL);
 		board.players[board.current_player].start_move_time = currentTime;
 		long moveelapsedSeconds = 0;
-		ft_printf("Your move? \n");
-		while (moveelapsedSeconds < 40)
+		ft_printf("Your move? (colomn) \n");
+		char *move;
+		while ((move = get_next_line(0)) != NULL)
 		{
-			char *move = get_next_line(0);
 			if (move)
 			{
 				printf("You entered: %s\n", move);
+				currentTime = time(NULL);
+				if (currentTime - board.players[board.current_player].start_move_time > board.players[board.current_player].allowed_move_time)
+				{
+					ft_printf("But your time is up...\n");
+					ft_printf("You lose!\n");
+					return (1);
+				}
+				// check move is a number and between 1 and board.cols
+				int pos = ft_atoi(move);
+				if (pos < 1 || pos > board.cols)
+				{
+					ft_printf("Invalid move. Please enter a number between 1 and %d\n", board.cols);
+					continue;
+				}
+				// check if the stack is full
+				if (board.stacks[pos - 1].top == board.rows - 1)
+				{
+					ft_printf("The stack is full. Please enter another move\n");
+					continue;
+				}
+				// put the piece in the stack
+				board.stacks[pos - 1].top++;
+				board.stacks[pos - 1].data[board.stacks[pos - 1].top] = board.players[board.current_player].piece[0];
+				printf("Player %d played in column %d\n", board.current_player + 1, pos);
+				printf("data in stack %s\n", board.stacks[pos - 1].data);
 				break;
 			}
-			moveelapsedSeconds = currentTime - board.players[board.current_player].start_move_time;
 		}
-
+		printstacks(board.stacks, board.rows ,board.cols);
 
 	}
 	else
