@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 13:49:49 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/03 14:17:00 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct 	s_player
 	char *name;
 	char *piece;
 	time_t start_time;
-	time_t move_time;
+	time_t start_move_time;
 }				t_player;
 
 /**
@@ -137,15 +137,46 @@ int main(int argc, char **argv)
 	// initialize players
 	t_player ai = {"AI", "X", time(NULL), time(NULL)};
 	t_player player = {"Mario", "O", time(NULL), time(NULL)};
-	board.players[0] = ai;
-	board.players[1] = player;
+	board.players[0] = player;
+	board.players[1] = ai;
 
 	printf("Hello World!\n");
 	printplayers(ai, player);
 	printstacks(board.stacks, board.rows ,board.cols);
 
-	// chose the first player
+	// seed random number generator
+	srand(time(NULL));
 
+	// chose the first player
+	if (rand() % 2 == 0)
+		board.current_player = 0;
+    else	
+		board.current_player = 1;
+	
+	
+	if (board.current_player == 0)
+	{
+		time_t currentTime = time(NULL);
+		board.players[board.current_player].start_move_time = currentTime;
+		long moveelapsedSeconds = 0;
+		ft_printf("Your move? \n");
+		while (moveelapsedSeconds < 40)
+		{
+			char *move = get_next_line(0);
+			if (move)
+			{
+				printf("You entered: %s\n", move);
+				break;
+			}
+			moveelapsedSeconds = currentTime - board.players[board.current_player].start_move_time;
+		}
+
+
+	}
+	else
+		printf("AI 2 starts\n");
+	
+    // int elapsedMinutes = moveelapsedSeconds / 60;
 
 	// ask for player move an check time
 
