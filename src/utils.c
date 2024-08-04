@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:00:26 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 14:45:37 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 15:41:48 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ void printstacks(t_stack *stacks, int rows, int cols)
 	for (int j = 0; j < cols; j++) {
         ft_printf(GREEN "+---");
     }
-	ft_printf(GREEN "+\n\n");
+	ft_printf(GREEN "+\n");
+	for (int j = 0; j < cols; j++) {
+        ft_printf(GREEN "  %2d", j + 1);
+    }
+	ft_printf(GREEN "\n\n");
 }
 
 void print_header()
@@ -92,15 +96,15 @@ bool init_board(t_board *board, int argc, char **argv)
 	}
 
 	board->rows = ft_atoi(argv[1]);
-	if (board->rows < 6 || board->rows > 9)
+	if (board->rows < 6 || board->rows > MAX_ROWS)
 	{
-		ft_printf("The number of rows must be between 6 and 9\n");
+		ft_printf("The number of rows must be between 6 and %d\n", MAX_ROWS);
 		return (false);
 	}
 	board->cols = ft_atoi(argv[2]);
-	if (board->cols < 7 || board->cols > 9)
+	if (board->cols < 7 || board->cols > MAX_COLS)
 	{
-		ft_printf("The number of columns must be between 7 and 9\n");
+		ft_printf("The number of columns must be between 7 and %d\n", MAX_COLS);
 		return (false);
 	}
 	return (true);

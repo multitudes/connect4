@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:51:43 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 15:22:17 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 15:35:40 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,7 +250,7 @@ int get_best_move(t_board *board, char ai_piece, char player_piece) {
         if (board->stacks[col].top < board->rows - 1) {
             make_move(&board->stacks[col], ai_piece);
             int moveValue = minimax(board->stacks, board->rows, board->cols, MAX_DEPTH, INT_MIN, INT_MAX, 0, ai_piece, player_piece);
-            printf("moveValue: %d for col %d\n", moveValue, col + 1);
+            // ft_printf("moveValue: %d for col %d\n", moveValue, col + 1);
 			undo_move(&board->stacks[col]);
             if (moveValue > bestValue) {
                 bestMove = col;

@@ -6,11 +6,10 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 14:49:39 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 15:35:53 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "libft.h"
 #include <time.h>
 #include <stdbool.h>
@@ -18,7 +17,6 @@
 #include "checks.h"
 #include "utils.h"
 #include "players.h"
-
 
 /**
  * @brief main function
@@ -38,8 +36,8 @@ int main(int argc, char **argv)
 	board.stacks = stacks;
 
 	// initialize players - name , piece, start_time, start_move_time, allowed_time, allowed_move_time, curr number_of_moves
-	t_player ai = {"AI", 'X', time(NULL), time(NULL), MAX_TIME, 4, 0};
-	t_player player = {"Mario", 'O', time(NULL), time(NULL), MAX_TIME, 4, 0};
+	t_player ai = {"AI", 'X', time(NULL), time(NULL), MAX_TIME, MAX_MOVE_TIME, 0};
+	t_player player = {"Mario", 'O', time(NULL), time(NULL), MAX_TIME, MAX_MOVE_TIME, 0};
 	board.players[0] = player;
 	board.players[1] = ai;
 
@@ -49,6 +47,12 @@ int main(int argc, char **argv)
 	choose_player(&board);
 		
 	while (1) {	
+		// check if it is a draw!
+		if (board.players[0].number_of_moves + board.players[1].number_of_moves == board.rows * board.cols)
+		{
+			ft_printf("It's a draw!\n");
+			return (0);
+		}
 		if (board.current_player == 0){
 			if (player_plays_and_wins(&board))
 				return (0);
@@ -64,12 +68,4 @@ int main(int argc, char **argv)
 				return (0);
 		}
 	}
-    // int elapsedMinutes = moveelapsedSeconds / 60;
-
-	// ask for player move an check time
-
-	// check for winner
-
-	// switch player
-	
 }
