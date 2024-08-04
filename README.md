@@ -1,6 +1,6 @@
 # connect4
 
-Here at 42 we do a weekend rush project. This weekend it is about Connect4.
+Here at 42 we do a weekend rush project. This weekend it is about connect4.
 
 > The goal of this rush is to write a Connect Four. That’s not all, you will need to write
 an AI to play against you. Wonderful, isn’t it?
@@ -104,5 +104,5 @@ if at a certain point in my simulation i get to the AI winning at a depth of 4 I
 
 After going through all the possible moves I will return the best score and the player will move again.
 
-## OPTIMIZATIONS
+## Optimizations
 I could adjust the depth parameter to make it stronger or weaker for different levels of play. 
