@@ -6,14 +6,25 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:51:43 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:33:55 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 12:52:02 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
 #include "connect.h"
+#include "minimax.h"
+#include "utils.h"
+#include "checks.h"
 
 #define MAX_DEPTH 5
+
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int min(int a, int b) {
+	return (a < b) ? a : b;
+}
 
 int evaluate_board(t_stack *stacks, int rows, int cols, char ai_piece, char player_piece) {
  	// Simple heuristic: count the number of pieces in a row for each player

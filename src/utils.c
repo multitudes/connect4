@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:00:26 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:40:33 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 13:00:28 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,13 @@ void printstacks(t_stack *stacks, int rows, int cols)
 
 void print_header()
 {
-	ft_printf(GREEN "Connect 4\n\n");
+	char *header = "\n\
+  ___  __   __ _  __ _  ____  ___  ____  ___ \n\
+ / __)/  \\ (  ( \\(  ( \\(  __)/ __)(_  _)/ _ \\\n\
+( (__(  O )/    //    / ) _)( (__   )( (__  (\n\
+ \\___)\\__/ \\_)__)\\_)__)(____)\\___) (__)  (__/\n\
+";
+	ft_printf(GREEN "%s\n\n", header);
 	
 
 }
