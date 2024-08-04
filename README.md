@@ -106,3 +106,11 @@ After going through all the possible moves I will return the best score and the 
 
 ## Optimizations
 I could adjust the depth parameter to make it stronger or weaker for different levels of play. 
+
+## Links
+https://www.hackerearth.com/blog/developers/minimax-algorithm-alpha-beta-pruning  
+https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning  
+https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning  
+
+
+
