@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:37:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:27:45 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 12:38:30 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ bool player_plays_and_win(t_board *board)
 		{
 			ft_printf(GREEN "You entered: %s\n", move);
 			if (asked_to_quit(move) || time_is_up(*board, move))
-				return (false);
+				return (true);
 			if (not_a_valid_input(*board, move))
 				continue;
 			int pos = ft_atoi(move);

@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:00:26 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:32:43 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 12:40:33 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,8 @@ bool time_is_up(t_board board, char *move)
 	if ((currentTime - board.players[board.current_player].start_move_time > board.players[board.current_player].allowed_move_time) || \
 		(currentTime - board.players[board.current_player].start_time > board.players[board.current_player].allowed_time))
 	{
-		ft_printf(GREEN"But your time is up...\n");
-		ft_printf(GREEN"You lose!\n");
+		ft_printf(GREEN"You had %d sec for the move and it took you %d secs...\n", board.players[board.current_player].allowed_move_time, currentTime - board.players[board.current_player].start_move_time);
+		ft_printf(GREEN"You lost!\n");
 		free(move);
 		return (true);
 	}
