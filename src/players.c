@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:37:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:38:30 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 12:42:20 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void choose_player(t_board *board)
     else 	
 		board->current_player = 1;
 }
-bool ai_plays_and_win(t_board *board)
+bool ai_plays_randomly_and_wins(t_board *board)
 {
 	time_t currentTime = time(NULL);
 	board->players[board->current_player].start_move_time = currentTime;
@@ -49,7 +49,7 @@ bool ai_plays_and_win(t_board *board)
 	return false;
 }
 
-bool player_plays_and_win(t_board *board)
+bool player_plays_and_wins(t_board *board)
 {
 	time_t currentTime = time(NULL);
 
