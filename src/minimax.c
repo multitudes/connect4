@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:51:43 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:52:02 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 13:51:43 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 #include "minimax.h"
 #include "utils.h"
 #include "checks.h"
+#include "libft.h"
 
-#define MAX_DEPTH 5
+#define MAX_DEPTH 4
 
 int max(int a, int b) {
     return (a > b) ? a : b;
@@ -27,16 +28,85 @@ int min(int a, int b) {
 }
 
 int evaluate_board(t_stack *stacks, int rows, int cols, char ai_piece, char player_piece) {
+    int score = 1;
+	int highestrow = 0;
+	// checking first what the highest stack is
+	for (int i = 0; i < cols; i++) {
+		if (stacks[i].top > highestrow) {
+			highestrow = stacks[i].top;
+		}
+	}
  	// Simple heuristic: count the number of pieces in a row for each player
-    // Replace with a more sophisticated evaluation function
-    int score = 0;
-    // ... implementation of evaluation function
-    return score;
+	for (int i = 0; i <= highestrow; i++) {
+		int ai_count = 0, player_count = 0;
+		for (int j = 0; j < cols; j++) {
+			if (stacks[j].data[i] == ai_piece) {
+				ai_count++;
+				player_count = 0;
+			} else if (stacks[j].data[i] == player_piece) {
+				player_count++;
+				ai_count = 0;
+			} else {
+				ai_count = 0;
+				player_count = 0;
+			}
+			score += ai_count * ai_count - player_count * player_count;
+		}
+    }
+	for (int i = 0; i < cols; i++) {
+        int ai_count = 0, player_count = 0;
+        for (int j = 0; j <= stacks[i].top; j++) {
+            if (stacks[i].data[j] == ai_piece) {
+                ai_count++;
+                player_count = 0;
+            } else if (stacks[i].data[j] == player_piece) {
+                player_count++;
+                ai_count = 0;
+            } else {
+                ai_count = 0;
+                player_count = 0;
+            }
+            score += ai_count * ai_count - player_count * player_count;
+        }
+    }
+	for (int i = 0; i <= highestrow - 3; i++) {
+        for (int j = 0; j < cols - 3; j++) {
+            int ai_count = 0, player_count = 0;
+            // Check forward diagonal
+            if (stacks[j].data[i] == ai_piece) ai_count++;
+            else if (stacks[j].data[i] == player_piece) player_count++;
+            if (stacks[j + 1].data[i + 1] == ai_piece) ai_count++;
+            else if (stacks[j + 1].data[i + 1] == player_piece) player_count++;
+            if (stacks[j + 2].data[i + 2] == ai_piece) ai_count++;
+            else if (stacks[j + 2].data[i + 2] == player_piece) player_count++;
+            if (stacks[j + 3].data[i + 3] == ai_piece) ai_count++;
+            else if (stacks[j + 3].data[i + 3] == player_piece) player_count++;
+            score += ai_count * ai_count - player_count * player_count;
+            // Check backward diagonal
+            if (stacks[j].data[i + 3] == ai_piece) ai_count++;
+            else if (stacks[j].data[i + 3] == player_piece) player_count++;
+            if (stacks[j + 1].data[i + 2] == ai_piece) ai_count++;
+            else if (stacks[j + 1].data[i + 2] == player_piece) player_count++;
+            if (stacks[j + 2].data[i + 1] == ai_piece) ai_count++;
+            else if (stacks[j + 2].data[i + 1] == player_piece) player_count++;
+            if (stacks[j + 3].data[i] == ai_piece) ai_count++;
+            else if (stacks[j + 3].data[i] == player_piece) player_count++;
+            score += ai_count * ai_count - player_count * player_count;
+        }
+    }
+
+	return score;
 }
 
 int minimax(t_stack *stacks, int rows, int cols, int depth, int alpha, int beta, int maximizingPlayer, char ai_piece, char player_piece) {
     if (depth == 0 || check_win(stacks, rows, cols, ai_piece) || check_win(stacks, rows, cols, player_piece)) {
-        return evaluate_board(stacks, rows, cols, ai_piece, player_piece);
+        if (check_win(stacks, rows, cols, ai_piece)) {
+            return 10000 + (MAX_DEPTH - depth) * 10000; // AI wins
+        } else if (check_win(stacks, rows, cols, player_piece)) {
+            return -10000 - (MAX_DEPTH - depth) * 10000; // Player wins
+        } else {
+            return evaluate_board(stacks, rows, cols, ai_piece, player_piece);
+        }
     }
 
     if (maximizingPlayer) {
@@ -79,12 +149,14 @@ int get_best_move(t_board *board, char ai_piece, char player_piece) {
         if (board->stacks[col].top < board->rows - 1) {
             make_move(&board->stacks[col], ai_piece);
             int moveValue = minimax(board->stacks, board->rows, board->cols, MAX_DEPTH, INT_MIN, INT_MAX, 0, ai_piece, player_piece);
-            undo_move(&board->stacks[col]);
+            printf("moveValue: %d for col %d\n", moveValue, col + 1);
+			undo_move(&board->stacks[col]);
             if (moveValue > bestValue) {
                 bestMove = col;
                 bestValue = moveValue;
             }
         }
     }
+	// ft_printf("Best move: %d\n", bestMove);
     return bestMove;
 }

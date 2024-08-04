@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:37:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 13:01:27 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 13:11:53 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,12 @@ bool ai_plays_minimax_and_wins(t_board *board)
 	board->players[board->current_player].start_move_time = currentTime;
 	// int pos = rand() % board->cols + 1;
 	int pos = get_best_move(board, board->players[board->current_player].piece, board->players[board->current_player == 0 ? 1 : 0].piece);
-	make_move(&(board->stacks[pos - 1]), board->players[board->current_player].piece);
+	if (pos < 0 || pos >= board->cols)
+	{
+		ft_printf("Invalid move. Please enter a number between 1 and %d\n", board->cols);
+		return false;
+	}
+	make_move(&(board->stacks[pos]), board->players[board->current_player].piece);
 	board->players[board->current_player].number_of_moves++;
 	if (board->players[board->current_player].number_of_moves > 3)
 	{

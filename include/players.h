@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:37:39 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:42:20 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 13:03:39 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ typedef struct 	s_player
 void choose_player(t_board *board);
 bool player_plays_and_wins(t_board *board);
 bool ai_plays_randomly_and_wins(t_board *board);
+bool ai_plays_minimax_and_wins(t_board *board);
 
 #endif

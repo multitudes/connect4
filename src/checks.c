@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:28:00 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 11:36:58 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 13:28:23 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int check_horizontal_win(t_stack *stacks, int rows, int cols, char player)
 			highestrow = stacks[i].top;
 		}
 	}
-    for (int i = 0; i < highestrow; i++) {
+    for (int i = 0; i <= highestrow; i++) {
         int count = 0;
         for (int j = 0; j < cols; j++) {
             if (stacks[j].data[i] == player) {
@@ -71,7 +71,7 @@ int check_diagonal_win(t_stack *stacks, int rows, int cols, char player)
 			highestrow = stacks[i].top;
 	}
     // Check forward diagonals
-    for (int i = 0; i < highestrow - 3; i++) {
+    for (int i = 0; i <= highestrow - 3; i++) {
         for (int j = 0; j < cols - 3; j++) {
             if (stacks[j].data[i] == player &&
                 stacks[j + 1].data[i + 1] == player &&
@@ -82,7 +82,7 @@ int check_diagonal_win(t_stack *stacks, int rows, int cols, char player)
     }
 
     // Check backward diagonals
-    for (int i = 3; i < highestrow; i++) {
+    for (int i = 3; i <= highestrow; i++) {
         for (int j = 0; j < cols - 3; j++) {
             if (stacks[j].data[i] == player &&
                 stacks[j + 1].data[i - 1] == player &&
