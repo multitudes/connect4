@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 18:43:05 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 12:31:06 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,18 @@ int main(int argc, char **argv)
 	board.stacks = stacks;
 
 	// initialize players - name , piece, start_time, start_move_time, allowed_time, allowed_move_time, curr number_of_moves
-	t_player ai = {"AI", "X", time(NULL), time(NULL), MAX_TIME, 4, 0};
-	t_player player = {"Mario", "O", time(NULL), time(NULL), MAX_TIME, 4, 0};
+	t_player ai = {"AI", 'X', time(NULL), time(NULL), MAX_TIME, 4, 0};
+	t_player player = {"Mario", 'O', time(NULL), time(NULL), MAX_TIME, 4, 0};
 	board.players[0] = player;
 	board.players[1] = ai;
 
+	print_header();
 	printplayers(ai, player);
 
 	choose_player(&board);
 	
 
-	printf("Player %s starts\n", board.players[board.current_player].name);
+	ft_printf(GREEN "Player %s starts\n", board.players[board.current_player].name);
 	
 	while (1) {	
 		if (board.current_player == 0){

@@ -6,13 +6,14 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:00:26 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 18:48:58 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 12:32:43 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "connect.h"
 #include "checks.h"
+#include "utils.h"
 
 void init_stacks(t_stack *stacks, int cols)
 {
@@ -27,20 +28,45 @@ void init_stacks(t_stack *stacks, int cols)
 
 void printstacks(t_stack *stacks, int rows, int cols)
 {	
+	// Print the top line of underscores
+    for (int j = 0; j < cols; j++) {
+        ft_printf(GREEN "+---");
+    }
+    ft_printf(GREEN "+\n");
+	// print the stacks
 	for (int i = rows - 1; i >= 0; i--)
 	{
-		for (int j = 0; j < cols; j++)
-		{
-			printf("%c", stacks[j].data[i]);
+        ft_printf(GREEN "| ");
+		for (int j = 0; j < cols; j++) {
+			if (stacks[j].data[i] == 'X') {
+				ft_printf(RED "X " RESET);
+			} else if (stacks[j].data[i] == 'O') {
+				ft_printf(YELLOW "O " RESET);
+			} else {
+				ft_printf(GREEN "- " RESET);
+			}
+			ft_printf(GREEN "| ");	
 		}
-		printf("\n");
+		ft_printf("\n");
 	}
+	// Print the bottom line of underscores
+	for (int j = 0; j < cols; j++) {
+        ft_printf(GREEN "+---");
+    }
+	ft_printf(GREEN "+\n\n");
+}
+
+void print_header()
+{
+	ft_printf(GREEN "Connect 4\n\n");
+	
+
 }
 
 void printplayers(t_player ai, t_player player)
 {
-	printf("Player 1: %s --- ", player.name);
-	printf("Player 2: %s\n", ai.name);
+	ft_printf(GREEN "Player 1: %s --- ", player.name);
+	ft_printf(GREEN "Player 2: %s\n", ai.name);
 }
 
 bool init_board(t_board *board, int argc, char **argv)
@@ -76,16 +102,21 @@ bool init_board(t_board *board, int argc, char **argv)
 
 void make_move(t_stack *stack, char piece)
 {
-
 	stack->top++;
 	stack->data[stack->top] = piece;
+}
+
+void undo_move(t_stack *stack)
+{
+	stack->data[stack->top] = '-';
+	stack->top--;
 }
 
 bool asked_to_quit(char *move)
 {
 	if (ft_strcmp(move, "q\n") == 0)
 	{
-		printf("quitting\n\n");
+		ft_printf("quitting\n\n");
 		free(move);
 		return (true);
 	}
@@ -98,8 +129,8 @@ bool time_is_up(t_board board, char *move)
 	if ((currentTime - board.players[board.current_player].start_move_time > board.players[board.current_player].allowed_move_time) || \
 		(currentTime - board.players[board.current_player].start_time > board.players[board.current_player].allowed_time))
 	{
-		ft_printf("But your time is up...\n");
-		ft_printf("You lose!\n");
+		ft_printf(GREEN"But your time is up...\n");
+		ft_printf(GREEN"You lose!\n");
 		free(move);
 		return (true);
 	}
@@ -130,7 +161,7 @@ bool player_wins(t_board board, char *move)
 {
 	if (board.players[board.current_player].number_of_moves++ > 3)
 	{
-		if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece[0]))
+		if (check_win(board.stacks, board.rows, board.cols, board.players[board.current_player].piece))
 		{
 			ft_printf("Player %s wins!\n", board.players[board.current_player].name);
 			printstacks(board.stacks, board.rows ,board.cols);

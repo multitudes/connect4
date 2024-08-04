@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:23:55 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/03 18:45:16 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 11:37:20 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 #include <time.h>
 #include <stdbool.h>
+#include "players.h"
 
 /**
  * @brief a stack is a column in the board
@@ -33,21 +34,6 @@ typedef struct	s_stack
 	int top;
 } 				t_stack;
 
-/**
- * @brief a player has 40 sec for move and ttl 4 min
- * 
- * 
-*/
-typedef struct 	s_player
-{
-	char 	*name;
-	char 	*piece;
-	time_t 	start_time;
-	time_t 	start_move_time;
-	int 	allowed_time;
-	int 	allowed_move_time;
-	int 	number_of_moves;
-}				t_player;
 
 /**
  * @brief the board is an array of stacks
