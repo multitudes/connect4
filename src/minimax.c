@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:51:43 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 15:10:05 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 15:22:17 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,19 @@ int min(int a, int b) {
 	return (a < b) ? a : b;
 }
 
+/**
+ * @brief check if there are potential wins for the player
+ * 
+ * @param stacks
+ * @param rows
+ * @param cols
+ * @param piece
+ * @return int
+ * 
+ * Returns zero or a strong bias for the move if it is a potential win
+ * I added this because I noticed the AI was notrecognizing potential 
+ * winning moves. This function is both used for the AI and the player
+ */
 int check_potential_wins(t_stack *stacks, int rows, int cols, char piece) {
     int potential_wins = 0;
     // Check rows
@@ -60,7 +73,22 @@ int check_potential_wins(t_stack *stacks, int rows, int cols, char piece) {
     return potential_wins;
 }
 
-
+/**
+ * @brief evaluate the board
+ * 
+ * @param stacks
+ * @param rows
+ * @param cols
+ * @param ai_piece
+ * @param player_piece
+ * @return int
+ * 
+ * Returns the score of the board. It is used by the minimax function
+ * to evaluate the board and make the best move.
+ * I check for potential win or lose situations first of all, then I check
+ * the number of pieces in a row for each player and return a score
+ * based on that. Also, same for vertical and diagonals.
+ */
 int evaluate_board(t_stack *stacks, int rows, int cols, char ai_piece, char player_piece) {
     int score = 1;
 	int highestrow = 0;
@@ -88,6 +116,8 @@ int evaluate_board(t_stack *stacks, int rows, int cols, char ai_piece, char play
 				ai_count = 0;
 				player_count = 0;
 			}
+			if (ai_count == 4) return 1000000; // AI wins
+            if (player_count == 4) return -1000000; // Player wins
 			score += ai_count * ai_count - player_count * player_count;
 		}
     }
@@ -104,6 +134,8 @@ int evaluate_board(t_stack *stacks, int rows, int cols, char ai_piece, char play
                 ai_count = 0;
                 player_count = 0;
             }
+			if (ai_count == 4) return 1000000; // AI wins
+            if (player_count == 4) return -1000000; // Player wins
             score += ai_count * ai_count - player_count * player_count;
         }
     }
@@ -111,31 +143,50 @@ int evaluate_board(t_stack *stacks, int rows, int cols, char ai_piece, char play
         for (int j = 0; j < cols - 3; j++) {
             int ai_count = 0, player_count = 0;
             // Check forward diagonal
-            if (stacks[j].data[i] == ai_piece) ai_count++;
-            else if (stacks[j].data[i] == player_piece) player_count++;
-            if (stacks[j + 1].data[i + 1] == ai_piece) ai_count++;
-            else if (stacks[j + 1].data[i + 1] == player_piece) player_count++;
-            if (stacks[j + 2].data[i + 2] == ai_piece) ai_count++;
-            else if (stacks[j + 2].data[i + 2] == player_piece) player_count++;
-            if (stacks[j + 3].data[i + 3] == ai_piece) ai_count++;
-            else if (stacks[j + 3].data[i + 3] == player_piece) player_count++;
-            score += ai_count * ai_count - player_count * player_count;
-            // Check backward diagonal
-            if (stacks[j].data[i + 3] == ai_piece) ai_count++;
-            else if (stacks[j].data[i + 3] == player_piece) player_count++;
-            if (stacks[j + 1].data[i + 2] == ai_piece) ai_count++;
-            else if (stacks[j + 1].data[i + 2] == player_piece) player_count++;
-            if (stacks[j + 2].data[i + 1] == ai_piece) ai_count++;
-            else if (stacks[j + 2].data[i + 1] == player_piece) player_count++;
-            if (stacks[j + 3].data[i] == ai_piece) ai_count++;
-            else if (stacks[j + 3].data[i] == player_piece) player_count++;
-            score += ai_count * ai_count - player_count * player_count;
+             for (int k = 0; k < 4; k++) {
+                if (stacks[j + k].data[i + k] == ai_piece) {
+                    ai_count++;
+                    player_count = 0;
+                } else if (stacks[j + k].data[i + k] == player_piece) {
+                    player_count++;
+                    ai_count = 0;
+                } else {
+                    ai_count = 0;
+                    player_count = 0;
+                }
+                if (ai_count == 4) return 1000000; // AI wins
+                if (player_count == 4) return -1000000; // Player wins
+                score += ai_count * ai_count - player_count * player_count;
+			}
         }
     }
 
 	return score;
 }
 
+/**
+ * @brief minimax algorithm
+ * 
+ * @param stacks
+ * @param rows
+ * @param cols
+ * @param depth
+ * @param alpha
+ * @param beta
+ * @param maximizingPlayer
+ * @param ai_piece
+ * @param player_piece
+ * @return int
+ * 
+ * The minimax algorithm is a recursive algorithm that is used to find the best move
+ * for the AI. The algorithm is based on the concept of a game tree, where each
+ * node represents a possible move, and the edges represent the possible outcomes of
+ * that move. The algorithm works by recursively exploring the game tree, evaluating
+ * the board at each node, and choosing the move that maximizes the AI's chances of
+ * winning. The algorithm uses a depth parameter to limit the number of moves it explores,
+ * and it uses alpha-beta pruning to improve efficiency by eliminating branches of the
+ * game tree that are guaranteed to be suboptimal.
+ */
 int minimax(t_stack *stacks, int rows, int cols, int depth, int alpha, int beta, int maximizingPlayer, char ai_piece, char player_piece) {
     if (depth == 0 || check_win(stacks, rows, cols, ai_piece) || check_win(stacks, rows, cols, player_piece)) {
         if (check_win(stacks, rows, cols, ai_piece)) {
@@ -146,7 +197,7 @@ int minimax(t_stack *stacks, int rows, int cols, int depth, int alpha, int beta,
             return evaluate_board(stacks, rows, cols, ai_piece, player_piece);
         }
     }
-
+	// Maximizing player is the AI. I want the AI to win :)
     if (maximizingPlayer) {
         int maxEval = INT_MIN;
         for (int col = 0; col < cols; col++) {
@@ -180,6 +231,18 @@ int minimax(t_stack *stacks, int rows, int cols, int depth, int alpha, int beta,
     }
 }
 
+/**
+ * @brief get the best move for the AI
+ * 
+ * @param board
+ * @param ai_piece
+ * @param player_piece
+ * @return int
+ * 
+ * This function is used to get the best move for the AI. It uses the minimax
+ * algorithm to evaluate the board and find the best move. The function returns
+ * the column number of the best move which starts at zero!
+ */
 int get_best_move(t_board *board, char ai_piece, char player_piece) {
     int bestMove = -1;
     int bestValue = INT_MIN;
