@@ -20,6 +20,17 @@ free, and so forth) except for undefined behaviors.
 ## Mandatory part
 It is played in the terminal.
 
+This is the screen for the mandatory part. Nothing fancy. Some ASCII art and the board.
+
+<div align="center">
+  <img src="connect1.png" width="400" height="400">
+</div>
+
+And then play...  
+<div align="center">
+  <img src="connect2.png" width="400" height="400">
+</div>
+
 ## Bonus part
 We can choose any lib you want (like sdl or ncurses).
 
