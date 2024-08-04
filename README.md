@@ -103,3 +103,6 @@ EX:
 if at a certain point in my simulation i get to the AI winning at a depth of 4 I will return a score of 1000. If I get to the player winning I will return -1000. But If I have my AI winning at depth 1 then this move is actually better so it will be 4000!
 
 After going through all the possible moves I will return the best score and the player will move again.
+
+## OPTIMIZATIONS
+I could adjust the depth parameter to make it stronger or weaker for different levels of play. 

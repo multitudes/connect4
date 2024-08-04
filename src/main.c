@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 15:35:53 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 16:33:07 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 		// check if it is a draw!
 		if (board.players[0].number_of_moves + board.players[1].number_of_moves == board.rows * board.cols)
 		{
-			ft_printf("It's a draw!\n");
+			ft_printf(GREEN "\nIt's a draw!\n");
 			return (0);
 		}
 		if (board.current_player == 0){
