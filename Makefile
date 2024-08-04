@@ -16,9 +16,9 @@ LIBS 			+= 	$(LIBFTDIR)/libft.a
 
 INCLUDES		=  	-I./include -I$(LIBMLX)/include -I$(LIBFTDIR)
 
-SRCS 			= $(addprefix $(SRC_DIR), main.c)
+SRCS 			= $(addprefix $(SRC_DIR), main.c checks.c utils.c players.c minimax.c)
 OBJS 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
-HDRS 			= $(addprefix include/, connect.h)
+HDRS 			= $(addprefix include/, connect.h checks.h utils.h players.h minimax.h)
 
 LIBFT 			= $(LIBFTDIR)/libft.a
 LIBFT_LIB 		= -Llibft -lft
@@ -52,11 +52,11 @@ $(NAME): $(OBJS) $(HDRS)
 clean:
 	rm -f $(OBJS)
 	rm -rf $(OBJ_DIR)
-	$(MAKE) -C $(LIBFTDIR) clean
+	# $(MAKE) -C $(LIBFTDIR) clean
 
 fclean: clean
 	@rm -rf $(NAME)
-	$(MAKE) -C $(LIBFTDIR) fclean
+	# $(MAKE) -C $(LIBFTDIR) fclean
 
 
 re: fclean all
