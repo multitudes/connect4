@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:21:34 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 13:03:10 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 14:49:39 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ int main(int argc, char **argv)
 	printplayers(ai, player);
 
 	choose_player(&board);
-	
-
-	ft_printf(GREEN "Player %s starts\n", board.players[board.current_player].name);
-	
+		
 	while (1) {	
 		if (board.current_player == 0){
 			if (player_plays_and_wins(&board))
@@ -58,8 +55,11 @@ int main(int argc, char **argv)
 		}
 		else
 		{
+			// the random implementation
 			// if (ai_plays_randomly_and_wins(&board))
 			// 	return (0);
+
+			// the minimax implementation
 			if (ai_plays_minimax_and_wins(&board))
 				return (0);
 		}

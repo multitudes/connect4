@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 12:23:55 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 11:37:20 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 15:08:23 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #define MAX_MOVE_TIME 40
 #define MAX_ROWS 9
 #define MAX_COLS 9
+#define EMPTY '-'
 
 #include <time.h>
 #include <stdbool.h>

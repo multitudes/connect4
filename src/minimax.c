@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:51:43 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 13:51:43 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 15:10:05 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,54 @@ int min(int a, int b) {
 	return (a < b) ? a : b;
 }
 
+int check_potential_wins(t_stack *stacks, int rows, int cols, char piece) {
+    int potential_wins = 0;
+    // Check rows
+    for (int i = 0; i < rows; i++) {
+        int count = 0;
+        for (int j = 0; j < cols; j++) {
+        	if (stacks[j].data[i] == piece &&
+                stacks[j + 1].data[i] == piece &&
+                stacks[j + 2].data[i] == piece &&
+                stacks[j + 3].data[i] == EMPTY) {
+                potential_wins += 1000; 
+            } else if (stacks[j].data[i] == piece &&
+				stacks[j + 1].data[i] == piece &&
+				stacks[j + 2].data[i] == EMPTY &&
+				stacks[j + 3].data[i] == piece) {
+				potential_wins += 1000; 
+			} else if (stacks[j].data[i] == piece &&
+				stacks[j + 1].data[i] == EMPTY &&
+				stacks[j + 2].data[i] == piece &&
+				stacks[j + 3].data[i] == piece) {
+				potential_wins += 1000; 
+			} else if (stacks[j].data[i] == EMPTY &&
+				stacks[j + 1].data[i] == piece &&
+				stacks[j + 2].data[i] == piece &&
+				stacks[j + 3].data[i] == piece) {
+				potential_wins += 1000; 
+			}
+        }
+    }
+    // Check columns and diagonals similarly
+    return potential_wins;
+}
+
+
 int evaluate_board(t_stack *stacks, int rows, int cols, char ai_piece, char player_piece) {
     int score = 1;
 	int highestrow = 0;
+
+	score += check_potential_wins(stacks, rows, cols, ai_piece);
+    score -= check_potential_wins(stacks, rows, cols, player_piece);
+
 	// checking first what the highest stack is
 	for (int i = 0; i < cols; i++) {
 		if (stacks[i].top > highestrow) {
 			highestrow = stacks[i].top;
 		}
 	}
- 	// Simple heuristic: count the number of pieces in a row for each player
+ 	// Simple heuristic: more points for the number of pieces in a row for each player
 	for (int i = 0; i <= highestrow; i++) {
 		int ai_count = 0, player_count = 0;
 		for (int j = 0; j < cols; j++) {

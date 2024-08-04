@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:37:10 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 13:11:53 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 14:49:12 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void choose_player(t_board *board)
 	}
     else 	
 		board->current_player = 1;
+	ft_printf(GREEN "Player %s starts\n", board->players[board->current_player].name);
 }
 
 /**
