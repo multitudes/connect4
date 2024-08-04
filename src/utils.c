@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:00:26 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 13:00:28 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 14:45:37 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,6 @@ bool init_board(t_board *board, int argc, char **argv)
 		return (false);
 	}
 	return (true);
-}
-
-void make_move(t_stack *stack, char piece)
-{
-	stack->top++;
-	stack->data[stack->top] = piece;
-}
-
-void undo_move(t_stack *stack)
-{
-	stack->data[stack->top] = '-';
-	stack->top--;
 }
 
 bool asked_to_quit(char *move)

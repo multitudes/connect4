@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:00:42 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 12:51:38 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/08/04 14:46:04 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,23 @@
 #define RED "\033[0;31m"
 #define RESET "\033[0m"
 
+// inline for efficiency
+inline void make_move(t_stack *stack, char piece)
+{
+	stack->top++;
+	stack->data[stack->top] = piece;
+}
+
+inline void undo_move(t_stack *stack)
+{
+	stack->data[stack->top] = '-';
+	stack->top--;
+}
+
 bool player_wins(t_board board, char *move);
 bool not_a_valid_input(t_board board, char *move);
 bool time_is_up(t_board board, char *move);
 bool asked_to_quit(char *move);
-void make_move(t_stack *stack, char piece);
-void undo_move(t_stack *stack);
 bool init_board(t_board *board, int argc, char **argv);
 void print_header();
 void printplayers(t_player ai, t_player player);
