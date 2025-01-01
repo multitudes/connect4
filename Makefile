@@ -3,7 +3,7 @@ NAME 			= 	connect4
 
 CC 				= 	cc
 
-CCFLAGS 		= 	-Wextra -Wall -Werror
+CFLAGS 		= 	-Wextra -Wall -Werror
 CFLAGS 			+= 	-Iinclude -Isrc -O3 -Wunreachable-code -Ofast
 # CFLAGS += -DDEBUG=1
 

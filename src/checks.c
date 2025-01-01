@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 15:28:00 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 13:28:23 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/11/08 15:52:08 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
  */
 int check_horizontal_win(t_stack *stacks, int rows, int cols, char player) 
 {
+	(void)rows;
 	int highestrow = 0;
 	// checking first what the highest stack is
 	for (int i = 0; i < cols; i++) {
@@ -46,6 +47,7 @@ int check_horizontal_win(t_stack *stacks, int rows, int cols, char player)
 
 int check_vertical_win(t_stack *stacks, int rows, int cols, char player) 
 {
+	(void) rows;
     for (int i = 0; i < cols; i++) {
         int count = 0;
         for (int j = 0; j <= stacks[i].top; j++) {
@@ -65,6 +67,7 @@ int check_vertical_win(t_stack *stacks, int rows, int cols, char player)
 
 int check_diagonal_win(t_stack *stacks, int rows, int cols, char player) 
 {
+	(void)rows;
 	int highestrow = 0;
 	for (int i = 0; i < cols; i++) {
 		if (stacks[i].top > highestrow) 

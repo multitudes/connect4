@@ -6,7 +6,7 @@
 /*   By: lbrusa <lbrusa@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:51:43 by lbrusa            #+#    #+#             */
-/*   Updated: 2024/08/04 15:35:40 by lbrusa           ###   ########.fr       */
+/*   Updated: 2024/11/08 15:52:20 by lbrusa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int check_potential_wins(t_stack *stacks, int rows, int cols, char piece) {
     int potential_wins = 0;
     // Check rows
     for (int i = 0; i < rows; i++) {
-        int count = 0;
+        // int count = 0;
         for (int j = 0; j < cols; j++) {
         	if (stacks[j].data[i] == piece &&
                 stacks[j + 1].data[i] == piece &&
